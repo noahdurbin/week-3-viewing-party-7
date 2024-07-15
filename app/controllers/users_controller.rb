@@ -22,8 +22,13 @@ class UsersController <ApplicationController
 
   def login_user
     user = User.find_by(email: params[:email])
-    flash[:success] = "Welcome, #{user.name}!"
-    redirect_to user_path(user)
+    if user.authenticate params[:password]
+      flash[:success] = "Welcome, #{user.name}!"
+      redirect_to user_path(user)
+    else
+      flash[:warning] = "Sorry, your credentials are bad"
+      redirect_to login_path
+    end
   end
 
   private

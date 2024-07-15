@@ -55,4 +55,18 @@ RSpec.describe 'Landing Page' do
 
     expect(current_path).to eq("/users/#{user.id}")
   end
+
+  it 'only lets a user in with the correct password' do
+    user = User.create(name: "Noah", email: "test@test.com", password: "passss", password_confirmation: "passss")
+
+    visit '/login'
+
+    fill_in :email, with: "test@test.com"
+    fill_in :password, with: "password"
+    click_button 'Log In'
+
+    expect(current_path).to eq(login_path)
+
+    expect(page).to have_content("Sorry, your credentials are bad")
+  end
 end
