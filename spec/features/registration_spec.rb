@@ -28,4 +28,17 @@ RSpec.describe "User Registration" do
     expect(current_path).to eq(register_path)
     expect(page).to have_content("Email has already been taken")
   end
+
+  it 'returns an error if passwords are notthe same' do
+    visit register_path
+
+    fill_in :user_name, with: 'User Two'
+    fill_in :user_email, with:'notunique@example.com'
+    fill_in :user_password, with: 'password'
+    fill_in :user_password_confirmation, with: 'pasword'
+    click_button 'Create New User'
+
+    expect(current_path).to eq(register_path)
+    expect(page).to have_content("Password confirmation doesn't match Password")
+  end
 end
