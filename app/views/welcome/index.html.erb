@@ -1,5 +1,8 @@
 <% unless current_user %>
   <%= button_to "Create New User", register_path, method: :get %>
+<% end %>
+
+<% unless !current_user %>
   <section class='existing-users'>
       <p>Existing Users: </p>
       <% @users.each do |user| %>
