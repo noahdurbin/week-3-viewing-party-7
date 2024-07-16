@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_action :require_user, only: :show
+
   def new
     @user = User.new
   end
@@ -20,7 +22,6 @@ class UsersController < ApplicationController
   end
 
   def login_form
-
   end
 
   def login_user
@@ -36,9 +37,22 @@ class UsersController < ApplicationController
     end
   end
 
+  def logout
+    session.delete(:user_id)
+    flash[:success] = "You have been logged out."
+    redirect_to root_path
+  end
+
   private
 
   def user_params
     params.require(:user).permit(:name, :email, :password)
+  end
+
+  def require_user
+    if !current_user
+      flash[:error] = "you must log in"
+      redirect_to root_path
+    end
   end
 end
